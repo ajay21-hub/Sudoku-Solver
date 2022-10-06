@@ -1,28 +1,22 @@
 package Sudoku;
 
-import java.util.Arrays;
-
 public class SudokuPuzzle {
 
 	protected String [][] board;
-	// Table to determine if a slot is mutable
-	protected boolean [][] mutable;
 	private final int ROWS;
 	private final int COLUMNS;
 	private final int BOXWIDTH;
 	private final int BOXHEIGHT;
 	private final String [] VALIDVALUES;
 	
-	public SudokuPuzzle(int rows,int columns,int boxWidth,int boxHeight,String [] validValues) {
+	public SudokuPuzzle(int rows,int columns,int boxWidth,int boxHeight, String[] validValues) {
 		this.ROWS = rows;
 		this.COLUMNS = columns;
 		this.BOXWIDTH = boxWidth;
 		this.BOXHEIGHT = boxHeight;
 		this.VALIDVALUES = validValues;
 		this.board = new String[ROWS][COLUMNS];
-		this.mutable = new boolean[ROWS][COLUMNS];
 		initializeBoard();
-		initializeMutableSlots();
 	}
 	public int getNumRows() {
 		return this.ROWS;
@@ -44,10 +38,11 @@ public class SudokuPuzzle {
 		return this.VALIDVALUES;
 	}
 	
-	public void makeMove(int row, int col, String value, boolean isMutable) {
-		if(this.isValidValue(value) && this.isValidMove(row,col,value) && this.isSlotMutable(row, col)) {
+	public void makeMove(int row, int col, String value, Boolean isInputValue) {
+		if(this.isValidValue(value) && this.isValidMove(row,col,value)) {
 			this.board[row][col] = value;
-			this.mutable[row][col] = isMutable;
+		} else if(isInputValue){
+			System.err.println("Invalid Key Pressed: " + value);
 		}
 	}
 
@@ -102,12 +97,9 @@ public class SudokuPuzzle {
 	}
 	
 	public boolean isSlotAvailable(int row,int col) {
-		 return (this.inRange(row,col) && this.board[row][col].equals("") && this.isSlotMutable(row, col));
+		 return (this.inRange(row,col) && this.board[row][col].equals(""));
 	}
-	
-	public boolean isSlotMutable(int row,int col) {
-		return this.mutable[row][col];
-	}
+
 	
 	public String getValue(int row,int col) {
 		if(this.inRange(row,col)) {
@@ -121,24 +113,13 @@ public class SudokuPuzzle {
 	}
 	
 	private boolean isValidValue(String value) {
-		for(String str : this.VALIDVALUES) {
-			if(str.equals(value)) return true;
-		}
-		return false;
+		return SudokuPuzzleType.PARAMETERS.getValidValuesAsArrayList().contains(value);
 	}
 	
 	public boolean inRange(int row,int col) {
 		return row <= this.ROWS && col <= this.COLUMNS && row >= 0 && col >= 0;
 	}
-	
-	public boolean boardFull() {
-		for(int r = 0;r < this.ROWS;r++) {
-			for(int c = 0;c < this.COLUMNS;c++) {
-				if(this.board[r][c].equals("")) return false;
-			}
-		}
-		return true;
-	}
+
 	
 	public void makeSlotEmpty(int row,int col) {
 		this.board[row][col] = "";
@@ -160,14 +141,6 @@ public class SudokuPuzzle {
 		for(int row = 0;row < this.ROWS;row++) {
 			for(int col = 0;col < this.COLUMNS;col++) {
 				this.board[row][col] = "";
-			}
-		}
-	}
-	
-	private void initializeMutableSlots() {
-		for(int row = 0;row < this.ROWS;row++) {
-			for(int col = 0;col < this.COLUMNS;col++) {
-				this.mutable[row][col] = true;
 			}
 		}
 	}

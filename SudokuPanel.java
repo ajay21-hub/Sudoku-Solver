@@ -6,9 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.font.FontRenderContext;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
@@ -34,7 +32,6 @@ public class SudokuPanel extends JPanel{
 		usedWidth = 0;
 		usedHeight = 0;
 		fontSize = 26;
-
 	}
 
 
@@ -72,6 +69,7 @@ public class SudokuPanel extends JPanel{
 				g2d.drawLine(x, 0, x, usedHeight);
 			}
 		}
+
 		//this will draw the right most line
 		//g2d.drawLine(usedWidth - 1, 0, usedWidth - 1,usedHeight);
 		for(int y = 0;y <= usedHeight;y+=slotHeight) {
@@ -121,11 +119,11 @@ public class SudokuPanel extends JPanel{
 	public class SolveButton implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String[][] solvedBoard = Solver.solve(puzzle.getBoard());
+			String[][] solvedBoard = SolverAlgorithm.solve(puzzle.getBoard());
 			if(solvedBoard!=null){
 				for (int row = 0; row < 9; row++) {
 					for (int column = 0; column < 9; column++) {
-						puzzle.makeMove(row,column, solvedBoard[row][column],true);
+						puzzle.makeMove(row, column, solvedBoard[row][column], false);
 					}
 				}
 			}
@@ -151,4 +149,20 @@ public class SudokuPanel extends JPanel{
 			}
 		}
 	}
+	public class SudokuPanelKeyActions implements KeyListener {
+		@Override
+		public void keyPressed(KeyEvent e) {
+			String keyEntered = String.valueOf(e.getKeyChar());
+			puzzle.makeMove(currentlySelectedRow, currentlySelectedCol, keyEntered, true);
+			repaint();
+		}
+		@Override
+		public void keyReleased(KeyEvent e) {
+		}
+		@Override
+		public void keyTyped(KeyEvent e) {
+		}
+	}
+
+
 }

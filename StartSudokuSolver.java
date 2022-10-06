@@ -1,4 +1,4 @@
-import Sudoku.SudokuFrame;
+package Sudoku;
 
 public class StartSudokuSolver {
     public static void main(String[] args) {

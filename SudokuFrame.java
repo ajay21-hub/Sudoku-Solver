@@ -9,7 +9,6 @@ import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class SudokuFrame extends JFrame {
-	private JLabel label;
 	private JPanel buttonSelectionPanel;
 	private SudokuPanel sPanel;
 	
@@ -24,12 +23,6 @@ public class SudokuFrame extends JFrame {
 		JMenu newGame = new JMenu("New Game");
 		JMenuItem sudokuGame = new JMenuItem("9 By 9 Game");
 		sudokuGame.addActionListener(new NewGameListener());
-		
-		/*
-		 * need to include this when solving algorithm is improved
-		 JMenuItem sixteenBySizteenGame = new JMenuItem("16 By 16 Game");
-		sixteenBySizteenGame.addActionListener(new NewGameListener(SudokuPuzzleType.SIXTEENBYSIXTEEN,16));
-		*/
 
 		newGame.add(sudokuGame);
 		file.add(newGame);
@@ -44,7 +37,11 @@ public class SudokuFrame extends JFrame {
 		buttonSelectionPanel.setPreferredSize(new Dimension(90,500));
 
 		sPanel = new SudokuPanel();
-		
+
+		// Add Keyboard Inputs
+		this.addKeyListener(sPanel.new SudokuPanelKeyActions());
+
+		// Add The Final Panel to Frame
 		windowPanel.add(sPanel);
 		windowPanel.add(buttonSelectionPanel);
 		this.add(windowPanel);
@@ -63,11 +60,11 @@ public class SudokuFrame extends JFrame {
 			b.addActionListener(sPanel.new NumActionListener());
 			buttonSelectionPanel.add(b);
 		}
+		buttonSelectionPanel.add(getSolveButton());
+		buttonSelectionPanel.add(getClearButton());
 		sPanel.repaint();
 		buttonSelectionPanel.revalidate();
 		buttonSelectionPanel.repaint();
-		buttonSelectionPanel.add(getSolveButton());
-		buttonSelectionPanel.add(getClearButton());
 	}
 	
 	private class NewGameListener implements ActionListener {

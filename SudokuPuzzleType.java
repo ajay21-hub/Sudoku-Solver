@@ -1,7 +1,10 @@
 package Sudoku;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum SudokuPuzzleType {
-	NINEBYNINE(9,9,3,3,new String[] {"1","2","3","4","5","6","7","8","9"},"9 By 9 Game");
+	PARAMETERS(9,9,3,3, new String[] {"1","2","3","4","5","6","7","8","9"},"9 By 9 Game");
 
 	private final int rows;
 	private final int columns;
@@ -34,11 +37,14 @@ public enum SudokuPuzzleType {
 	public int getBoxHeight() {
 		return boxHeight;
 	}
-	
-	public String [] getValidValues() {
+
+	public List<String> getValidValuesAsArrayList() {
+		return Arrays.asList(validValues);
+	}
+	public String[] getValidValues() {
 		return validValues;
 	}
-	
+
 	public String toString() {
 		return desc;
 	}
